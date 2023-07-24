@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { GameState } from "../constants";
+import { GameState, CellType } from "../constants";
 
 export interface IControlState {
   board: number[][];
@@ -17,12 +17,12 @@ const initialState: IControlState = {
   gameState: GameState.READY,
 };
 
-const createBoard = (row: number, column: number) => {
+const initBoard = (row: number, column: number) => {
   const board: number[][] = [];
   for (let i = 0; i < row; i++) {
     const data = [];
     for (let j = 0; j < column; j++) {
-      data.push(0);
+      data.push(CellType.NORMAL);
     }
     board.push(data);
   }
@@ -34,7 +34,7 @@ const controlSlice = createSlice({
   initialState,
   reducers: {
     readyGame: (state, action) => {
-      state.board = createBoard(action.payload.row, action.payload.column);
+      state.board = initBoard(action.payload.row, action.payload.column);
       state.row = action.payload.row;
       state.column = action.payload.column;
       state.mineCnt = action.payload.mineCnt;
