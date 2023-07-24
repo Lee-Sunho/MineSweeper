@@ -1,11 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-export enum GameState {
-  READY = "READY",
-  PLAYING = "PLAYING",
-  WIN = "WIN",
-  LOSE = "LOSE",
-}
+import { GameState } from "../constants";
 
 export interface IControlState {
   board: number[][];
