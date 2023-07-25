@@ -73,6 +73,7 @@ const controlSlice = createSlice({
       state.row = action.payload.row;
       state.column = action.payload.column;
       state.mineCnt = action.payload.mineCnt;
+      state.gameState = GameState.READY;
     },
     startGame: (state, action) => {
       state.board = plantMines(
@@ -85,9 +86,16 @@ const controlSlice = createSlice({
         state.board,
         state.column
       );
+      state.gameState = GameState.RUN;
       console.log(state.board);
     },
+    openCell: (state, action) => {
+      state.board[action.payload.rowIndex][action.payload.colIndex] =
+        CellType.OPENED;
+    },
+    openBomb: (state, action) => {},
   },
 });
-export const { readyGame, startGame } = controlSlice.actions;
+export const { readyGame, startGame, openCell, openBomb } =
+  controlSlice.actions;
 export default controlSlice.reducer;
