@@ -93,13 +93,37 @@ const controlSlice = createSlice({
       state.board[action.payload.rowIndex][action.payload.colIndex] =
         CellType.OPENED;
     },
-    openBomb: (state, action) => {
+    openMine: (state, action) => {
       state.board[action.payload.rowIndex][action.payload.colIndex] =
         CellType.MINE_CLICKED;
       state.gameState = GameState.LOSE;
     },
+    toggleFlag: (state, action) => {
+      const type =
+        state.board[action.payload.rowIndex][action.payload.colIndex];
+      if (type === CellType.MINE) {
+        state.board[action.payload.rowIndex][action.payload.colIndex] =
+          CellType.MINE_FLAG;
+        return;
+      }
+      if (type === CellType.MINE_FLAG) {
+        state.board[action.payload.rowIndex][action.payload.colIndex] =
+          CellType.MINE;
+        return;
+      }
+      if (type === CellType.NORMAL) {
+        state.board[action.payload.rowIndex][action.payload.colIndex] =
+          CellType.NORMAL_FLAG;
+        return;
+      }
+      if (type === CellType.NORMAL_FLAG) {
+        state.board[action.payload.rowIndex][action.payload.colIndex] =
+          CellType.NORMAL;
+        return;
+      }
+    },
   },
 });
-export const { readyGame, startGame, openCell, openBomb } =
+export const { readyGame, startGame, openCell, openMine, toggleFlag } =
   controlSlice.actions;
 export default controlSlice.reducer;

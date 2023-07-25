@@ -1,12 +1,18 @@
 import styled from "styled-components";
 import { CellType, GameState } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
-import { openCell, openBomb, startGame } from "../redux/controlSlice";
+import {
+  openCell,
+  openMine,
+  startGame,
+  toggleFlag,
+} from "../redux/controlSlice";
 import { RootState } from "../redux/configureStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBomb } from "@fortawesome/free-solid-svg-icons";
+import { faBomb, faFlag } from "@fortawesome/free-solid-svg-icons";
+import { defaultTheme } from "../style/theme";
 
-const Button = styled.button<{ isOpened: boolean; isBomb: boolean }>`
+const Button = styled.button<{ isOpened: boolean; isMine: boolean }>`
   width: 25px;
   height: 25px;
   display: flex;
@@ -15,7 +21,7 @@ const Button = styled.button<{ isOpened: boolean; isBomb: boolean }>`
   background-color: ${(props) =>
     props.isOpened
       ? props.theme.lightgray
-      : props.isBomb
+      : props.isMine
       ? props.theme.red
       : props.theme.darkgray};
 `;
@@ -39,13 +45,17 @@ const Cell = ({ type, rowIndex, colIndex }: IProps) => {
     switch (type) {
       case CellType.MINE:
         return "X";
-
+      case CellType.MINE_CLICKED:
+        return <FontAwesomeIcon icon={faBomb} />;
+      case CellType.MINE_FLAG:
+      case CellType.NORMAL_FLAG:
+        return <FontAwesomeIcon icon={faFlag} color={defaultTheme.flag} />;
       default:
         return "";
     }
   };
 
-  const onClick = () => {
+  const onLeftClick = () => {
     if (gameState === GameState.LOSE) {
       return;
     }
@@ -61,22 +71,28 @@ const Cell = ({ type, rowIndex, colIndex }: IProps) => {
       }
 
       case CellType.MINE:
-        dispatch(openBomb({ rowIndex, colIndex }));
+        dispatch(openMine({ rowIndex, colIndex }));
         return;
       default:
         return;
     }
   };
+
+  const onRightClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (gameState === GameState.LOSE) {
+      return;
+    }
+    dispatch(toggleFlag({ rowIndex, colIndex }));
+  };
   return (
     <Button
-      onClick={onClick}
+      onClick={onLeftClick}
+      onContextMenu={onRightClick}
       isOpened={type === CellType.OPENED}
-      isBomb={type === CellType.MINE_CLICKED}
+      isMine={type === CellType.MINE_CLICKED}
     >
       {getCellText()}
-      {type === CellType.MINE_CLICKED ? (
-        <FontAwesomeIcon icon={faBomb} />
-      ) : null}
     </Button>
   );
 };
