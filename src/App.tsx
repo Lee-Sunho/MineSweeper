@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import store from "./redux/configureStore";
 import { ThemeProvider, styled } from "styled-components";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { GlobalStyle } from "./style/GlobalStyle";
 import { defaultTheme } from "./style/theme";
+import Board from "./components/Board";
 
 const Container = styled.div`
   display: flex;
@@ -15,13 +16,16 @@ const Container = styled.div`
 
 function App() {
   let persistor = persistStore(store);
+
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <GlobalStyle />
-            <Container></Container>
+            <Container>
+              <Board />
+            </Container>
           </PersistGate>
         </Provider>
       </ThemeProvider>
