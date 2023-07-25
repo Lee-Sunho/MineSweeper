@@ -93,7 +93,11 @@ const controlSlice = createSlice({
       state.board[action.payload.rowIndex][action.payload.colIndex] =
         CellType.OPENED;
     },
-    openBomb: (state, action) => {},
+    openBomb: (state, action) => {
+      state.board[action.payload.rowIndex][action.payload.colIndex] =
+        CellType.MINE_CLICKED;
+      state.gameState = GameState.LOSE;
+    },
   },
 });
 export const { readyGame, startGame, openCell, openBomb } =

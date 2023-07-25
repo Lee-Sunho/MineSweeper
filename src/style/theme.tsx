@@ -5,4 +5,5 @@ export const defaultTheme: DefaultTheme = {
   darkgray: "#808080",
   darkblue: "#537188",
   sand: "#CBB279",
+  red: "#DB4455",
 };

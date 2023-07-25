@@ -3,12 +3,21 @@ import { CellType, GameState } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { openCell, openBomb, startGame } from "../redux/controlSlice";
 import { RootState } from "../redux/configureStore";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBomb } from "@fortawesome/free-solid-svg-icons";
 
-const Button = styled.button<{ isOpened: boolean }>`
+const Button = styled.button<{ isOpened: boolean; isBomb: boolean }>`
   width: 25px;
   height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: ${(props) =>
-    props.isOpened ? props.theme.lightgray : props.theme.darkgray};
+    props.isOpened
+      ? props.theme.lightgray
+      : props.isBomb
+      ? props.theme.red
+      : props.theme.darkgray};
 `;
 
 interface IProps {
@@ -37,6 +46,9 @@ const Cell = ({ type, rowIndex, colIndex }: IProps) => {
   };
 
   const onClick = () => {
+    if (gameState === GameState.LOSE) {
+      return;
+    }
     if (gameState === GameState.READY) {
       dispatch(startGame(rowIndex * colCnt + colIndex));
       return;
@@ -56,8 +68,15 @@ const Cell = ({ type, rowIndex, colIndex }: IProps) => {
     }
   };
   return (
-    <Button onClick={onClick} isOpened={type === CellType.OPENED}>
+    <Button
+      onClick={onClick}
+      isOpened={type === CellType.OPENED}
+      isBomb={type === CellType.MINE_CLICKED}
+    >
       {getCellText()}
+      {type === CellType.MINE_CLICKED ? (
+        <FontAwesomeIcon icon={faBomb} />
+      ) : null}
     </Button>
   );
 };

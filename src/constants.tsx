@@ -11,4 +11,5 @@ export enum CellType {
   NORMAL_FLAG = -2,
   MINE = -3,
   MINE_FLAG = -4,
+  MINE_CLICKED = -5,
 }
