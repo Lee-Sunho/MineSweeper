@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { GameState, CellType } from "../constants";
+import { initBoard } from "./utils/initBoard";
+import { createMines } from "./utils/createMines";
+import { plantMines } from "./utils/plantMines";
+import { pair } from "./utils/checkAround";
+import { checkAround } from "./utils/checkAround";
 
 export interface IControlState {
   board: number[][];
@@ -15,53 +20,6 @@ const initialState: IControlState = {
   column: 0,
   mineCnt: 0,
   gameState: GameState.READY,
-};
-
-const initBoard = (row: number, column: number) => {
-  const board: number[][] = [];
-  for (let i = 0; i < row; i++) {
-    const data = [];
-    for (let j = 0; j < column; j++) {
-      data.push(CellType.NORMAL);
-    }
-    board.push(data);
-  }
-  return board;
-};
-
-const createMines = (
-  row: number,
-  column: number,
-  mineCnt: number,
-  startPosition: number
-) => {
-  const candidates = Array(row * column)
-    .fill(undefined)
-    .map((value, i) => {
-      return i; // 0부터 배열의 길이 - 1까지 채워진 배열
-    });
-  const shuffle = [];
-  while (candidates.length > row * column - mineCnt) {
-    const chosen = candidates.splice(
-      Math.floor(Math.random() * candidates.length),
-      1
-    )[0]; // 뽑힌 숫자는 제거
-    if (chosen !== startPosition) {
-      // 첫 클릭 시 지뢰 아니도록
-      shuffle.push(chosen);
-    }
-  }
-  return shuffle;
-};
-
-const plantMines = (mines: number[], board: number[][], column: number) => {
-  const copyBoard = JSON.parse(JSON.stringify(board));
-  for (let i = 0; i < mines.length; i++) {
-    const r = Math.floor(mines[i] / column);
-    const c = mines[i] % column;
-    copyBoard[r][c] = CellType.MINE;
-  }
-  return copyBoard;
 };
 
 const controlSlice = createSlice({
@@ -90,8 +48,9 @@ const controlSlice = createSlice({
       console.log(state.board);
     },
     openCell: (state, action) => {
-      state.board[action.payload.rowIndex][action.payload.colIndex] =
-        CellType.OPENED;
+      const { rowIndex, colIndex } = action.payload;
+      const visited: pair[] = [];
+      checkAround(state.board, rowIndex, colIndex, visited);
     },
     openMine: (state, action) => {
       state.board[action.payload.rowIndex][action.payload.colIndex] =
