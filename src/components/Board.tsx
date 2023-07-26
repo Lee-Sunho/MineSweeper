@@ -1,16 +1,15 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { readyGame, startGame } from "../redux/controlSlice";
+import { useSelector } from "react-redux";
 import Cell from "./Cell";
 import { RootState } from "../redux/configureStore";
 import { styled } from "styled-components";
-import { CellType, GameState } from "../constants";
+import { GameState } from "../constants";
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 32px;
 `;
 
 const Row = styled.div`
@@ -25,17 +24,12 @@ const Result = styled.span`
 `;
 
 const Board = () => {
-  const dispatch = useDispatch();
   const board = useSelector<RootState, number[][]>((state) => {
     return state.control.board;
   });
   const state = useSelector<RootState, GameState>((state) => {
     return state.control.gameState;
   });
-
-  useEffect(() => {
-    dispatch(readyGame({ row: 8, column: 8, mineCnt: 10 }));
-  }, []);
 
   return (
     <Wrapper>
