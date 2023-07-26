@@ -12,6 +12,7 @@ export interface IControlState {
   column: number;
   mineCnt: number;
   gameState: GameState;
+  openedCnt: number;
 }
 
 const initialState: IControlState = {
@@ -20,6 +21,7 @@ const initialState: IControlState = {
   column: 0,
   mineCnt: 0,
   gameState: GameState.READY,
+  openedCnt: 0,
 };
 
 const controlSlice = createSlice({
@@ -32,6 +34,7 @@ const controlSlice = createSlice({
       state.column = action.payload.column;
       state.mineCnt = action.payload.mineCnt;
       state.gameState = GameState.READY;
+      state.openedCnt = 0;
     },
     startGame: (state, action) => {
       state.board = plantMines(
@@ -45,12 +48,17 @@ const controlSlice = createSlice({
         state.column
       );
       state.gameState = GameState.RUN;
-      console.log(state.board);
     },
     openCell: (state, action) => {
       const { rowIndex, colIndex } = action.payload;
       const visited: pair[] = [];
-      checkAround(state.board, rowIndex, colIndex, visited);
+
+      const count = checkAround(state.board, rowIndex, colIndex, visited)!;
+      state.openedCnt += count;
+
+      if (state.openedCnt === state.row * state.column - state.mineCnt) {
+        state.gameState = GameState.WIN;
+      }
     },
     openMine: (state, action) => {
       state.board[action.payload.rowIndex][action.payload.colIndex] =

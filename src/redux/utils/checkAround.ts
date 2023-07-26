@@ -7,10 +7,12 @@ export interface pair {
 
 export const checkAround = (
   board: number[][],
+  //openedCnt: number,
   rowIndex: number,
   colIndex: number,
   visited: pair[]
-) => {
+): number | undefined => {
+  let cnt = 0;
   if (
     rowIndex < 0 ||
     rowIndex >= board.length ||
@@ -50,6 +52,10 @@ export const checkAround = (
     [CellType.MINE, CellType.MINE_FLAG].includes(v)
   ).length;
 
+  if (board[rowIndex][colIndex] === CellType.NORMAL) {
+    cnt++;
+  }
+
   if (count !== undefined) {
     board[rowIndex][colIndex] = count;
   }
@@ -71,8 +77,17 @@ export const checkAround = (
 
     near.forEach((cell) => {
       if (board[cell.rowIndex][cell.colIndex] !== CellType.OPENED) {
-        checkAround(board, cell.rowIndex, cell.colIndex, visited);
+        const result = checkAround(
+          board,
+          cell.rowIndex,
+          cell.colIndex,
+          visited
+        )!;
+        if (result) {
+          cnt += result;
+        }
       }
     });
   }
+  return cnt;
 };

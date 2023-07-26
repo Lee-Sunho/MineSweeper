@@ -58,7 +58,7 @@ const Cell = ({ type, rowIndex, colIndex }: IProps) => {
   };
 
   const onLeftClick = () => {
-    if (gameState === GameState.LOSE) {
+    if (gameState === GameState.LOSE || gameState === GameState.WIN) {
       return;
     }
     if (gameState === GameState.READY) {
