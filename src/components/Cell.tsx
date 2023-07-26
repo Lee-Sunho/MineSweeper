@@ -43,6 +43,8 @@ const Cell = ({ type, rowIndex, colIndex }: IProps) => {
 
   const getCellText = () => {
     switch (type) {
+      case CellType.NORMAL:
+        return "";
       case CellType.MINE:
         return "X";
       case CellType.MINE_CLICKED:
@@ -51,7 +53,7 @@ const Cell = ({ type, rowIndex, colIndex }: IProps) => {
       case CellType.NORMAL_FLAG:
         return <FontAwesomeIcon icon={faFlag} color={defaultTheme.flag} />;
       default:
-        return "";
+        return type || "";
     }
   };
 
@@ -61,7 +63,6 @@ const Cell = ({ type, rowIndex, colIndex }: IProps) => {
     }
     if (gameState === GameState.READY) {
       dispatch(startGame(rowIndex * colCnt + colIndex));
-      return;
     }
 
     switch (type) {
@@ -89,7 +90,7 @@ const Cell = ({ type, rowIndex, colIndex }: IProps) => {
     <Button
       onClick={onLeftClick}
       onContextMenu={onRightClick}
-      isOpened={type === CellType.OPENED}
+      isOpened={type >= CellType.OPENED}
       isMine={type === CellType.MINE_CLICKED}
     >
       {getCellText()}
