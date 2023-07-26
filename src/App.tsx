@@ -8,13 +8,14 @@ import { GlobalStyle } from "./style/GlobalStyle";
 import { defaultTheme } from "./style/theme";
 import Board from "./components/Board";
 import ControlBox from "./components/ControlBox";
+import CustomBox from "./components/CustomBox";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 100px 0px;
+  padding: 50px 0px;
 `;
 
 function App() {

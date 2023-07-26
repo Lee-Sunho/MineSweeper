@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 `;
 
 const Row = styled.div`
