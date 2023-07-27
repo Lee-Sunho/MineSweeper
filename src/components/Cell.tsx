@@ -46,10 +46,17 @@ const Cell = ({ type, rowIndex, colIndex }: IProps) => {
       case CellType.NORMAL:
         return "";
       case CellType.MINE:
-        return "X";
+        if (gameState === GameState.LOSE) {
+          return <FontAwesomeIcon icon={faBomb} />;
+        }
+        return "";
       case CellType.MINE_CLICKED:
         return <FontAwesomeIcon icon={faBomb} />;
       case CellType.MINE_FLAG:
+        if (gameState === GameState.LOSE) {
+          return <FontAwesomeIcon icon={faBomb} />;
+        }
+        return <FontAwesomeIcon icon={faFlag} color={defaultTheme.flag} />;
       case CellType.NORMAL_FLAG:
         return <FontAwesomeIcon icon={faFlag} color={defaultTheme.flag} />;
       default:
