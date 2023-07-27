@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  padding: 8px;
+  padding: 8px 8px 8px 8px;
   gap: 8px;
 `;
 

@@ -13,6 +13,7 @@ export interface IControlState {
   mineCnt: number;
   gameState: GameState;
   openedCnt: number;
+  flagCnt: number;
 }
 
 const initialState: IControlState = {
@@ -22,6 +23,7 @@ const initialState: IControlState = {
   mineCnt: 0,
   gameState: GameState.READY,
   openedCnt: 0,
+  flagCnt: 0,
 };
 
 const controlSlice = createSlice({
@@ -35,6 +37,7 @@ const controlSlice = createSlice({
       state.mineCnt = action.payload.mineCnt;
       state.gameState = GameState.READY;
       state.openedCnt = 0;
+      state.flagCnt = 0;
     },
     startGame: (state, action) => {
       state.board = plantMines(
@@ -71,21 +74,25 @@ const controlSlice = createSlice({
       if (type === CellType.MINE) {
         state.board[action.payload.rowIndex][action.payload.colIndex] =
           CellType.MINE_FLAG;
+        state.flagCnt++;
         return;
       }
       if (type === CellType.MINE_FLAG) {
         state.board[action.payload.rowIndex][action.payload.colIndex] =
           CellType.MINE;
+        state.flagCnt--;
         return;
       }
       if (type === CellType.NORMAL) {
         state.board[action.payload.rowIndex][action.payload.colIndex] =
           CellType.NORMAL_FLAG;
+        state.flagCnt++;
         return;
       }
       if (type === CellType.NORMAL_FLAG) {
         state.board[action.payload.rowIndex][action.payload.colIndex] =
           CellType.NORMAL;
+        state.flagCnt--;
         return;
       }
     },

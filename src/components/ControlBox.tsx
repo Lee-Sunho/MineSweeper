@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import DifficultyBox from "./DifficultyBox";
 import CustomBox from "./CustomBox";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/configureStore";
 
 const Wrapper = styled.div`
   display: flex;
@@ -25,7 +27,7 @@ const Info = styled.div`
   font-size: 12px;
   font-weight: 700;
   flex-direction: column;
-  padding: 0px 8px 8px 8px;
+  padding: 8px 8px 8px 8px;
   gap: 4px;
 `;
 
@@ -35,13 +37,16 @@ const Reset = styled.button`
 `;
 
 const ControlBox = () => {
+  const remain = useSelector<RootState, number>((state) => {
+    return state.control.mineCnt - state.control.flagCnt;
+  });
   return (
     <Wrapper>
       <ControlWrapper>
         <DifficultyBox />
         <Info>
-          <span>남은 지뢰 개수: </span>
-          <span>경과 시간: </span>
+          <span>남은 지뢰 개수 : {remain}</span>
+          <span>경과 시간 : </span>
         </Info>
         <Reset>Reset</Reset>
       </ControlWrapper>

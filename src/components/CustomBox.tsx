@@ -16,6 +16,7 @@ const Wrapper = styled.div`
 
 const Input = styled.input`
   width: 80px;
+  margin-bottom: 4px;
 `;
 
 const Button = styled.button`
@@ -71,7 +72,7 @@ const CustomBox = () => {
         value={mine}
         onChange={onChangeMine}
       />
-      <Button onClick={onClickBtn}>시작</Button>
+      <Button onClick={onClickBtn}>Custom</Button>
     </Wrapper>
   );
 };
