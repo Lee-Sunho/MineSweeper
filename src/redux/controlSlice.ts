@@ -14,6 +14,7 @@ export interface IControlState {
   gameState: GameState;
   openedCnt: number;
   flagCnt: number;
+  timer: number;
 }
 
 const initialState: IControlState = {
@@ -24,6 +25,7 @@ const initialState: IControlState = {
   gameState: GameState.READY,
   openedCnt: 0,
   flagCnt: 0,
+  timer: 0,
 };
 
 const controlSlice = createSlice({
@@ -38,6 +40,7 @@ const controlSlice = createSlice({
       state.gameState = GameState.READY;
       state.openedCnt = 0;
       state.flagCnt = 0;
+      state.timer = 0;
     },
     startGame: (state, action) => {
       state.board = plantMines(
@@ -96,8 +99,17 @@ const controlSlice = createSlice({
         return;
       }
     },
+    increaseTimer: (state, action) => {
+      state.timer++;
+    },
   },
 });
-export const { readyGame, startGame, openCell, openMine, toggleFlag } =
-  controlSlice.actions;
+export const {
+  readyGame,
+  startGame,
+  openCell,
+  openMine,
+  toggleFlag,
+  increaseTimer,
+} = controlSlice.actions;
 export default controlSlice.reducer;

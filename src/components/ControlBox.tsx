@@ -3,7 +3,10 @@ import DifficultyBox from "./DifficultyBox";
 import CustomBox from "./CustomBox";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
-import { readyGame } from "../redux/controlSlice";
+import { increaseTimer, readyGame } from "../redux/controlSlice";
+import { useEffect } from "react";
+import { CellType, GameState } from "../constants";
+import Cell from "./Cell";
 
 const Wrapper = styled.div`
   display: flex;
@@ -37,13 +40,9 @@ const Reset = styled.button`
   color: white;
 `;
 
-interface currentSize {
-  row: number;
-  column: number;
-  mineCnt: number;
-}
 const ControlBox = () => {
   const dispatch = useDispatch();
+
   const row = useSelector<RootState, number>((state) => {
     return state.control.row;
   });
@@ -53,20 +52,40 @@ const ControlBox = () => {
   const mineCnt = useSelector<RootState, number>((state) => {
     return state.control.mineCnt;
   });
+  const currentState = useSelector<RootState, GameState>((state) => {
+    return state.control.gameState;
+  });
   const remain = useSelector<RootState, number>((state) => {
     return state.control.mineCnt - state.control.flagCnt;
   });
 
+  const timer = useSelector<RootState, number>((state) => {
+    return state.control.timer;
+  });
+
+  useEffect(() => {
+    let t: any;
+    if (currentState === GameState.RUN) {
+      t = setInterval(() => {
+        dispatch(increaseTimer({}));
+      }, 1000);
+    }
+    return () => {
+      clearInterval(t);
+    };
+  }, [currentState]);
+
   const handleReset = () => {
     dispatch(readyGame({ row, column, mineCnt }));
   };
+
   return (
     <Wrapper>
       <ControlWrapper>
         <DifficultyBox />
         <Info>
           <span>남은 지뢰 개수 : {remain}</span>
-          <span>경과 시간 : </span>
+          <span>경과 시간 : {timer}</span>
         </Info>
         <Reset onClick={handleReset}>Reset</Reset>
       </ControlWrapper>
