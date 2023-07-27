@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import DifficultyBox from "./DifficultyBox";
 import CustomBox from "./CustomBox";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
+import { readyGame } from "../redux/controlSlice";
 
 const Wrapper = styled.div`
   display: flex;
@@ -36,10 +37,29 @@ const Reset = styled.button`
   color: white;
 `;
 
+interface currentSize {
+  row: number;
+  column: number;
+  mineCnt: number;
+}
 const ControlBox = () => {
+  const dispatch = useDispatch();
+  const row = useSelector<RootState, number>((state) => {
+    return state.control.row;
+  });
+  const column = useSelector<RootState, number>((state) => {
+    return state.control.column;
+  });
+  const mineCnt = useSelector<RootState, number>((state) => {
+    return state.control.mineCnt;
+  });
   const remain = useSelector<RootState, number>((state) => {
     return state.control.mineCnt - state.control.flagCnt;
   });
+
+  const handleReset = () => {
+    dispatch(readyGame({ row, column, mineCnt }));
+  };
   return (
     <Wrapper>
       <ControlWrapper>
@@ -48,7 +68,7 @@ const ControlBox = () => {
           <span>남은 지뢰 개수 : {remain}</span>
           <span>경과 시간 : </span>
         </Info>
-        <Reset>Reset</Reset>
+        <Reset onClick={handleReset}>Reset</Reset>
       </ControlWrapper>
       <CustomBox />
     </Wrapper>
