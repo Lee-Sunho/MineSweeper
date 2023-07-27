@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
 import { increaseTimer, readyGame } from "../redux/controlSlice";
 import { useEffect } from "react";
-import { CellType, GameState } from "../constants";
-import Cell from "./Cell";
+import { GameState } from "../constants";
 
 const Wrapper = styled.div`
   display: flex;
@@ -63,6 +62,7 @@ const ControlBox = () => {
     return state.control.timer;
   });
 
+  // 게임이 진행 중인 경우에만 타이머 동작
   useEffect(() => {
     let t: any;
     if (currentState === GameState.RUN) {
@@ -75,6 +75,7 @@ const ControlBox = () => {
     };
   }, [currentState]);
 
+  // 게임 리셋 기능
   const handleReset = () => {
     dispatch(readyGame({ row, column, mineCnt }));
   };

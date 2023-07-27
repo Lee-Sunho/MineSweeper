@@ -21,9 +21,11 @@ const DifficultyBox = () => {
   const dispatch = useDispatch();
   const [clicked, setClicked] = useState("Beginner");
 
+  // 처음에는 비기너 난이도로 설정
   useEffect(() => {
     dispatch(readyGame({ row: 8, column: 8, mineCnt: 10 }));
   }, []);
+
   return (
     <Wrapper>
       <Button

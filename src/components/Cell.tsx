@@ -41,6 +41,7 @@ const Cell = ({ type, rowIndex, colIndex }: IProps) => {
     return state.control.column;
   });
 
+  // CellType에 따라 표시되는 내용을 결정하는 함수
   const getCellText = () => {
     switch (type) {
       case CellType.NORMAL:
@@ -65,9 +66,11 @@ const Cell = ({ type, rowIndex, colIndex }: IProps) => {
   };
 
   const onLeftClick = () => {
+    // 게임 종료 시 버튼 클릭 안되게
     if (gameState === GameState.LOSE || gameState === GameState.WIN) {
       return;
     }
+    // 첫 클릭 시 지뢰가 터지지 않도록, 첫 클릭 이후 지뢰 생성하는 로직
     if (gameState === GameState.READY) {
       dispatch(startGame(rowIndex * colCnt + colIndex));
     }
