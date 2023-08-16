@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/MineSweeper/static/js/main.cd717ae2.js",
+    "index.html": "/MineSweeper/index.html",
+    "main.cd717ae2.js.map": "/MineSweeper/static/js/main.cd717ae2.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.cd717ae2.js"
+  ]
+}
